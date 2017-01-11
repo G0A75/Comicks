@@ -16,5 +16,14 @@ namespace Comicks
         {
             InitializeComponent();
         }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = ofd.Filter = "CBZ Files(*.cbz)|*.cbz|CBR Files(*.cbr)|*.cbr|" +
+               "CBT Files(*.cbt)|*.cbt|CBA Files(*.cba)|*.cba|All Files|*.*";
+            ofd.ShowDialog();
+            
+        }
     }
 }
