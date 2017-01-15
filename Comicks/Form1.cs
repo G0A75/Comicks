@@ -17,13 +17,32 @@ namespace Comicks
             InitializeComponent();
         }
 
+        #region Variables
+
+        private const string SupportedFileTypes = @"CBZ Files|*.cbz|CBR Files|*.cbr|CBT Files|*.cbt|CBA Files|*.cba|All Files|*.*";
+
+        #endregion
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = ofd.Filter = "CBZ Files(*.cbz)|*.cbz|CBR Files(*.cbr)|*.cbr|" +
-               "CBT Files(*.cbt)|*.cbt|CBA Files(*.cba)|*.cba|All Files|*.*";
-            ofd.ShowDialog();
-            
+        {      
+            try
+            {
+                // Construct the OpenFileDialog
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Title = @"Open a file";
+                    ofd.Filter = SupportedFileTypes;
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        // To do
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(@"Unable to open file." + Environment.NewLine + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
