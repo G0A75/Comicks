@@ -25,5 +25,10 @@ namespace Comicks
             ofd.ShowDialog();
             
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
