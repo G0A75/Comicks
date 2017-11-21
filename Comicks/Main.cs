@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCompress.Readers;
+using System.IO;
 
 namespace Comicks
 {
@@ -35,7 +37,8 @@ namespace Comicks
 
                     if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        // To do
+                        ExtractComic("cbr", ofd.FileName);
+                    
                     }
                 }
             }
@@ -44,10 +47,27 @@ namespace Comicks
                 MessageBox.Show(@"Unable to open file." + Environment.NewLine + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        
+        private void ExtractComic(string comicFileType, string comicPath)
         {
-            Environment.Exit(0);
+            using (Stream stream = File.OpenRead(comicPath))
+            {
+                var reader = ReaderFactory.Open(stream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        Console.WriteLine(reader.Entry.Key);
+                        reader.WriteEntryToDirectory(@"C:\temp", new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                    }
+                }
+            }
+          
+        }
+
+        private void exitToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
