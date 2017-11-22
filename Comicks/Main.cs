@@ -22,7 +22,7 @@ namespace Comicks
         #region Variables
 
         private const string SupportedFileTypes = @"CBZ Files|*.cbz|CBR Files|*.cbr|CBT Files|*.cbt|CBA Files|*.cba|All Files|*.*";
-
+        private const string TempFolder = @"C:\Comixtemp";
         #endregion
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -37,7 +37,7 @@ namespace Comicks
 
                     if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        ExtractComic("cbr", ofd.FileName);
+                        ExtractComic(ofd.FileName);
                     
                     }
                 }
@@ -47,22 +47,50 @@ namespace Comicks
                 MessageBox.Show(@"Unable to open file." + Environment.NewLine + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
-        private void ExtractComic(string comicFileType, string comicPath)
+        /// <summary>
+        /// Extract comic selected by user
+        /// </summary>
+        /// <param name="comicPath">file path of file selected by user</param>
+        private void ExtractComic(string comicPath)
         {
-            using (Stream stream = File.OpenRead(comicPath))
+            try
             {
-                var reader = ReaderFactory.Open(stream);
-                while (reader.MoveToNextEntry())
+                using (Stream stream = File.OpenRead(comicPath))
                 {
-                    if (!reader.Entry.IsDirectory)
+                    var reader = ReaderFactory.Open(stream);
+                    while (reader.MoveToNextEntry())
                     {
-                        Console.WriteLine(reader.Entry.Key);
-                        reader.WriteEntryToDirectory(@"C:\temp", new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        if (!reader.Entry.IsDirectory)
+                        {
+                            Console.WriteLine(reader.Entry.Key);
+                            reader.WriteEntryToDirectory(@"C:\Comixtemp", new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                            ShowComic();
+                        }
                     }
                 }
             }
-          
+            catch(Exception ex)
+            {
+                MessageBox.Show(@"Unable to open file."+ Environment.NewLine + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ShowComic()
+        {
+            string comicDirectory;
+            string[] comicFiles;
+            string[] directory;
+
+            directory = Directory.GetDirectories(TempFolder);
+            comicDirectory = directory[0];
+
+            comicFiles = Directory.GetFiles(comicDirectory);
+            pictureBox1.ImageLocation = comicFiles[0];
+
+            
+
+            
+
         }
 
         private void exitToolStripMenuItem_Click_1(object sender, EventArgs e)
