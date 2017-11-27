@@ -23,6 +23,7 @@ namespace Comicks
 
         private const string SupportedFileTypes = @"CBZ Files|*.cbz|CBR Files|*.cbr|CBT Files|*.cbt|CBA Files|*.cba|All Files|*.*";
         private const string TempFolder = @"C:\Comixtemp";
+        private Image imgOriginal;
         #endregion
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -85,8 +86,12 @@ namespace Comicks
             comicDirectory = directory[0];
 
             comicFiles = Directory.GetFiles(comicDirectory);
-            pictureBox1.ImageLocation = comicFiles[0];
+            imgOriginal = Image.FromFile(comicFiles[0]);
+            objImageViewer1.Image = imgOriginal;
 
+
+            
+            
             
 
             
@@ -97,5 +102,18 @@ namespace Comicks
         {
             this.Close();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            objImageViewer1.Zoom += (float)0.1;
+            
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            objImageViewer1.Zoom -= (float)0.1;
+        }
+       
+        
     }
 }
